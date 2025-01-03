@@ -1,5 +1,41 @@
 // Chat Bot Functions
 let isChatOpen = false;
+const suggestions = [
+    { text: 'Tell me about the course', key: 'course' },
+    { text: 'What are the job prospects?', key: 'job' },
+    { text: 'Do you offer refunds?', key: 'refund' },
+    { text: 'How long is the course?', key: 'duration' },
+    { text: 'Is there a certificate?', key: 'certificate' },
+    { text: 'What are the payment options?', key: 'payment' },
+    { text: 'Do I need experience?', key: 'prerequisite' },
+    { text: 'How do I start?', key: 'start' },
+    { text: 'What support is provided?', key: 'support' },
+    { text: 'Show me the curriculum', key: 'curriculum' }
+];
+
+function getRandomSuggestions(count = 5) {
+    return [...suggestions]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, count);
+}
+
+function displaySuggestions() {
+    const suggestionsDiv = document.createElement('div');
+    suggestionsDiv.className = 'chat-suggestions';
+    
+    getRandomSuggestions().forEach(suggestion => {
+        const button = document.createElement('button');
+        button.className = 'suggestion-btn';
+        button.textContent = suggestion.text;
+        button.onclick = () => {
+            document.getElementById('userInput').value = suggestion.text;
+            sendMessage();
+        };
+        suggestionsDiv.appendChild(button);
+    });
+    
+    document.getElementById('chatMessages').appendChild(suggestionsDiv);
+}
 
 function toggleChat() {
     const chatWindow = document.getElementById('chatWindow');
@@ -9,6 +45,7 @@ function toggleChat() {
     if (isChatOpen && document.getElementById('chatMessages').children.length === 0) {
         // Send welcome message when chat is first opened
         addBotMessage("👋 Hi! How can I help you today?");
+        displaySuggestions();
     }
 }
 
